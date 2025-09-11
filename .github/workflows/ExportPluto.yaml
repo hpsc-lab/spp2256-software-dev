@@ -1,0 +1,68 @@
+name: Export Pluto notebooks
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/ExportPluto.yml'
+      - '**/*.jl'
+      - '**/*.toml'
+  workflow_dispatch:
+
+# When two jobs run in parallel, cancel the older ones, to make sure that the website is generated from the most recent commit.
+concurrency:
+  group: pluto-export
+  cancel-in-progress: false
+
+# This action needs permission to write the exported HTML file to the gh-pages branch.
+permissions:
+  actions: write
+  contents: read
+  pages: write
+  id-token: write
+  # (all other permission fields default to "none")
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v5
+
+      - name: Install Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: "1" # This will automatically pick the latest Julia version
+
+      - name: Cache Julia artifacts & such
+        uses: julia-actions/cache@v2
+
+      - name: Run & export Pluto notebooks
+        run: |
+          julia --color=yes -e 'using Pkg
+              Pkg.activate(mktempdir())
+              Pkg.add([
+              Pkg.PackageSpec(name="PlutoSliderServer", version="0.3.2-0.3"),
+              ])
+
+              import PlutoSliderServer
+
+              PlutoSliderServer.github_action(".";
+              Export_cache_dir="pluto_state_cache",
+              Export_baked_notebookfile=false,
+              Export_baked_state=false,
+              Export_create_pluto_featured_index=true,
+              # more parameters can go here
+              )'
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+
+      - name: Deploy GitHub Pages site
+        id: deployment
+        uses: actions/deploy-pages@v4
