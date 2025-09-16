@@ -41,6 +41,14 @@ using DoubleFloats
 # ╔═╡ 56ecb9c6-df62-4b02-82a4-24caf8f0617d
 using LinearAlgebra
 
+# ╔═╡ bf37d36a-3474-43cc-b995-905d9ed5fb22
+ChooseDisplayMode()
+
+# ╔═╡ 1641844e-3534-41f3-8090-b9f473ae42e5
+md"""
+# Exercise 1: Automatic differentiation and Newton-Raphson
+"""
+
 # ╔═╡ 889f7b49-ba24-4c3c-8fde-57c3d15911a6
 import ForwardDiff
 
@@ -1970,6 +1978,8 @@ version = "4.1.0+0"
 # ╔═╡ Cell order:
 # ╠═386d8da4-92b7-11f0-251e-a72210ea1ddc
 # ╠═4c02e11d-2fbd-4279-aa01-4d40bf75f4e0
+# ╟─bf37d36a-3474-43cc-b995-905d9ed5fb22
+# ╟─1641844e-3534-41f3-8090-b9f473ae42e5
 # ╠═889f7b49-ba24-4c3c-8fde-57c3d15911a6
 # ╠═a46c3fbc-e33d-46f2-8e40-27a834f78414
 # ╟─6be3db90-62be-44b5-9e41-18b2a1f3f507

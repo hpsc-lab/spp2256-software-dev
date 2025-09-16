@@ -34,6 +34,9 @@ begin
 			   markersize = 16)
 end
 
+# ╔═╡ cc969ec0-db42-44c2-bd35-76dd61caf74f
+ChooseDisplayMode()
+
 # ╔═╡ 8cb2a5c5-2b06-4435-a914-c8d946aa2066
 md"""
 # Introduction
@@ -1941,6 +1944,7 @@ version = "4.1.0+0"
 # ╔═╡ Cell order:
 # ╠═7456b574-9209-11f0-3032-0dde708d4d9c
 # ╠═82443a4c-a04a-4a4f-9448-a61de50fbaa7
+# ╟─cc969ec0-db42-44c2-bd35-76dd61caf74f
 # ╟─8cb2a5c5-2b06-4435-a914-c8d946aa2066
 # ╟─4c1e856e-d27c-441d-9b78-e64ad899a2a7
 # ╟─921e0b94-c134-4309-bc40-f5dad807ca12

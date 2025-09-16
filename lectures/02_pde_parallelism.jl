@@ -49,6 +49,11 @@ using BenchmarkTools
 # ╔═╡ 85712bd6-e7f0-4573-bb73-5a70feb168e9
 using OhMyThreads
 
+# ╔═╡ c6d5b486-e9b8-4348-b52a-d04f2efc65ff
+md"""
+# 1D PDE and Multi-threading
+"""
+
 # ╔═╡ 81049556-e62f-473c-8862-a46643baffb7
 md"""
 $\frac{\partial u(x, t)}{\partial t} = a * \frac{\partial^2 u(x, t)}{\partial x^2}$ 
@@ -2571,6 +2576,7 @@ version = "4.1.0+0"
 # ╔═╡ Cell order:
 # ╠═9f4b0e87-309a-4c23-a40c-f842eefbaad1
 # ╠═9fc277fd-360c-44b6-832d-025e95282e51
+# ╟─c6d5b486-e9b8-4348-b52a-d04f2efc65ff
 # ╟─81049556-e62f-473c-8862-a46643baffb7
 # ╠═80fef996-6ef2-481f-bd14-05b19bd5ddd0
 # ╠═bcb7c9e0-f258-428f-a568-dbbac88afc36
