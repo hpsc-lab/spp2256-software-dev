@@ -8,7 +8,10 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 808fd962-f205-45a7-909b-94992a5f6721
-using PlutoTeachingTools
+begin
+	using PlutoUI, PlutoTeachingTools
+	using PlutoUI: Slider
+end
 
 # ╔═╡ 01b3bac5-43c0-4aad-9f9c-0db8f04d1bf6
 ChooseDisplayMode()
@@ -131,9 +134,11 @@ end
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 PlutoTeachingTools = "661c6b06-c737-4d37-b85c-46df65de6f69"
+PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 
 [compat]
 PlutoTeachingTools = "~0.4.5"
+PlutoUI = "~0.7.71"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -142,7 +147,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.6"
 manifest_format = "2.0"
-project_hash = "12dd94a5c3fcf0706b50ae2ae6ea2d925c7a2071"
+project_hash = "e5094d54302d8167f7dbadc3c2774c8d9e0cd001"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -477,7 +482,7 @@ version = "17.4.0+2"
 # ╠═808fd962-f205-45a7-909b-94992a5f6721
 # ╠═01b3bac5-43c0-4aad-9f9c-0db8f04d1bf6
 # ╟─55c4e8db-1689-4b46-b6c1-352415a43a03
-# ╠═068d5028-92f1-11f0-144b-6b6df1c89eb4
+# ╟─068d5028-92f1-11f0-144b-6b6df1c89eb4
 # ╠═d2e827d5-af7f-4840-887e-237345b19a0a
 # ╠═47e529ad-7cbf-456f-86a1-711f528da20b
 # ╠═e79e61a1-9b23-45b6-bd1a-70e280c1acd4
