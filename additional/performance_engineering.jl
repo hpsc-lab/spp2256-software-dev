@@ -5,7 +5,7 @@
 #> chapter = "1"
 #> section = "3"
 #> order = "3"
-#> title = "Performance Engineering"
+#> title = "Aside: Performance Engineering"
 #> date = "2025-04-30"
 #> tags = ["module1", "track_performance"]
 #> layout = "layout.jlhtml"
