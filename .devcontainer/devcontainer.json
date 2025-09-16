@@ -1,6 +1,6 @@
 {
     "name": "Pluto notebook",
-    "image": "ghcr.io/juliahpc/derse25-workshop:main",
+    "image": "ghcr.io/hpsc-lab/spp2256-software-dev:main",
 
     "customizations": {
 	"vscode": {
