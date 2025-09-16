@@ -2,15 +2,8 @@
 # v0.20.18
 
 #> [frontmatter]
-#> title = "Summer of Programming Languages: Julia"
+#> title = "Lecture 04"
 #> license = "MIT"
-#> 
-#>     [[frontmatter.author]]
-#>     name = "Valentin Churavy"
-#>     image = "https://avatars.githubusercontent.com/u/145258?v=4"
-#>     url = "https://vchuravy.dev"
-#>     [[frontmatter.author]]
-#>     name = "Mosè Giordano"
 
 using Markdown
 using InteractiveUtils
@@ -63,7 +56,7 @@ using Statistics
 
 # ╔═╡ a9a6a199-e1c5-479f-9bc1-76a073e42e24
 md"""
-## Interoperability: Interaction with other languages
+# Interoperability: Interaction with other languages
 
 | Language | Julia Tool | Embed Julia |
 | -------- | ---------- | ----------- |
