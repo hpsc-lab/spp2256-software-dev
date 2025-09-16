@@ -20,6 +20,13 @@ macro bind(def, element)
     #! format: on
 end
 
+# ╔═╡ 28f80981-74cb-4e20-8a84-3be15894532e
+begin
+	using PlutoUI, PlutoTeachingTools
+	using PlutoUI: Slider
+	PlutoUI.TableOfContents(; depth=4)
+end
+
 # ╔═╡ e5e2a706-2122-4a6b-8a2d-f8bb801c3055
 begin
 	using CairoMakie
@@ -34,9 +41,6 @@ using CondaPkg; CondaPkg.add("seaborn")
 
 # ╔═╡ 1a7f20f9-a69c-49a2-a012-ed59657cc29f
 using PythonCall, RDatasets
-
-# ╔═╡ e036e0b1-60f5-4670-9956-15e74d010ee9
-using MPI, Serialization, StaticArrays
 
 # ╔═╡ 0e88ed74-261d-4aad-82dc-ed8076684406
 using Measurements
@@ -194,22 +198,6 @@ macro mpi(np, expr)
 		rm($control_io_path)
 		all(isnothing, v) ? nothing : v
 	end
-end
-
-# ╔═╡ fa98c58b-e61b-4762-a89f-58cf6b5a50d0
-@mpi np let
-	using StaticArrays
-	
-	MPI.Init()
-	comm = MPI.COMM_WORLD
-
-	x = ones(SVector{3, Float64})
-	sum = MPI.Allreduce([x], +, comm)
-
-	if MPI.Comm_rank(comm) == 0
-		@show sum
-	end
-	nothing
 end
 
 # ╔═╡ c739f61d-7104-4ae4-9934-fc98657fc2fc
@@ -526,18 +514,23 @@ md"""
 - [2025 RSE Course](https://vchuravy.dev/rse-course)
 """
 
-# ╔═╡ 28f80981-74cb-4e20-8a84-3be15894532e
-begin
-	using PlutoUI, PlutoTeachingTools
-	using PlutoUI: Slider
-	PlutoUI.TableOfContents(; depth=4)
-end
+# ╔═╡ e036e0b1-60f5-4670-9956-15e74d010ee9
+using MPI, Serialization, StaticArrays
 
-# ╔═╡ 83fd4129-f9bf-47af-a9ea-505511909ebe
-begin
-	using PlutoUI, PlutoTeachingTools
-	using PlutoUI: Slider
-	PlutoUI.TableOfContents(; depth=4)
+# ╔═╡ fa98c58b-e61b-4762-a89f-58cf6b5a50d0
+@mpi np let
+	using StaticArrays
+	
+	MPI.Init()
+	comm = MPI.COMM_WORLD
+
+	x = ones(SVector{3, Float64})
+	sum = MPI.Allreduce([x], +, comm)
+
+	if MPI.Comm_rank(comm) == 0
+		@show sum
+	end
+	nothing
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -2909,7 +2902,6 @@ version = "4.1.0+0"
 # ╔═╡ Cell order:
 # ╠═28f80981-74cb-4e20-8a84-3be15894532e
 # ╠═e5e2a706-2122-4a6b-8a2d-f8bb801c3055
-# ╟─83fd4129-f9bf-47af-a9ea-505511909ebe
 # ╟─a9a6a199-e1c5-479f-9bc1-76a073e42e24
 # ╟─b1dcb967-cfd4-4961-9c70-d9e027be5eee
 # ╟─2497e952-8220-46e5-a1c5-4c24631bc026
