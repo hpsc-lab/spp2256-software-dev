@@ -6,7 +6,7 @@ To find prerendered notebooks go to https://hpsc-lab.github.io/spp2256-software-
 For the tutorials we will use [Pluto.jl](https://plutojl.org/) notebooks in [Julia](https://julialang.org/).
 
 ### Installing Julia
-Download and install Julia for your platform from [here](https://julialang.org/downloads/).
+Download and install Julia for your platform from [here](https://julialang.org/downloads/). For this workshop, please make sure to use Julia v1.11.
 
 ### Installing Pluto.jl
 Start Julia 
