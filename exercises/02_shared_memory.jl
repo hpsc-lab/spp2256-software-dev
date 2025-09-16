@@ -155,7 +155,7 @@ begin
 end
 
 # ╔═╡ ec872df1-376b-4536-b349-1223b5fc6a30
-N = 64
+N = 256
 
 # ╔═╡ 64abef85-b6f8-485a-a563-487293689464
 md"""
@@ -197,7 +197,7 @@ begin
 end
 
 # ╔═╡ c19cd90c-360a-494d-bd0a-03f2280f5c2a
-t_final = 3.0
+t_final = 2.0
 
 # ╔═╡ db82f703-1cc7-4069-85df-0c158058e1aa
 prob = ODEProblem(heat_2D!, u₀, (0.0, t_final), (a, dx, dy))
@@ -214,7 +214,7 @@ let
 	data = @lift parent(sol.u[$idx])
 	fig, ax, hm = heatmap(xs, ys, data)
 	
-	Makie.Record(fig, 1:length(sol.u), framerate=10) do i
+	Makie.Record(fig, 1:length(sol.u), framerate=5) do i
 	    idx[] = i
 	end
 end
@@ -235,7 +235,77 @@ function heat_2D!(du, u, (a, dx, dy), t)
     u[:, M+1] .= u[:, 0]
 
 	for i in 1:N, j in 1:M
-		du[i, j] = a * dt * (
+		du[i, j] = a * (
+			(u[i + 1, j] - 2 * u[i, j] + u[i - 1, j]) / dx^2 +
+			(u[i, j + 1] - 2 * u[i, j] + u[i, j - 1]) / dy^2
+		)
+	end
+	return nothing
+end
+```
+"""))
+
+# ╔═╡ 3b57df08-53ac-4b72-9c2b-7bd5549f6858
+md"""
+!!! note
+    Now that we have a 2D PDE implemented we should parallelize it!
+"""
+
+# ╔═╡ cc83f609-4cf8-483c-bd27-42fe370e4625
+import Base.Threads: @threads
+
+# ╔═╡ da6feb40-e45b-4f9e-b99f-18eb00a3a23e
+function parallel_heat_2D!(du, u, (a, dx, dy), t)
+	N, M = size(u)
+    N = N - 2
+    M = M - 2
+	
+	# enforce boundary conditions (wrap around)
+	
+    u[0, :]   .= u[N, :]
+    u[N+1, :] .= u[1, :]
+    u[:, 0]   .= u[:, M]
+    u[:, M+1] .= u[:, 0]
+
+	# implement me!
+	return nothing
+end
+
+# ╔═╡ c861390d-baad-4ede-9bef-c3bf5d5b58d8
+pprob = ODEProblem(parallel_heat_2D!, u₀, (0.0, t_final), (a, dx, dy))
+
+# ╔═╡ 93de99d1-6896-49e8-852a-74f4717ffccc
+psol = solve(pprob, Tsit5(), saveat=0.2)
+
+# ╔═╡ de5e1339-5987-43c8-a809-b7ab4cfea155
+let
+	idx = Observable(1)
+	data = @lift parent(psol.u[$idx])
+	fig, ax, hm = heatmap(xs, ys, data)
+	
+	Makie.Record(fig, 1:length(sol.u), framerate=5) do i
+	    idx[] = i
+	end
+end
+
+# ╔═╡ 38d0d9ec-cc66-4222-9f29-45cb83507f8a
+answer_box(hint(md"""
+```julia
+function heat_2D!(du, u, (a, dx, dy), t)
+	N, M = size(u)
+    N = N - 2
+    M = M - 2
+	
+	# enforce boundary conditions (wrap around)
+	
+    u[0, :]   .= u[N, :]
+    u[N+1, :] .= u[1, :]
+    u[:, 0]   .= u[:, M]
+    u[:, M+1] .= u[:, 0]
+
+	@threads :static for i in 1:N
+		for j in 1:M
+		du[i, j] = a * (
 			(u[i + 1, j] - 2 * u[i, j] + u[i - 1, j]) / dx^2 +
 			(u[i, j + 1] - 2 * u[i, j] + u[i, j - 1]) / dy^2
 		)
@@ -2346,7 +2416,7 @@ version = "4.1.0+0"
 # ╠═b425e2b6-a712-4569-b0a4-fcbb8856f35b
 # ╠═3274b87f-c5c4-45e3-ab06-9cd7a7123732
 # ╟─fc29cc61-84f4-4d5d-b2cd-a8862fe2e934
-# ╠═d5229b28-c257-43b4-8fe9-d071b2d986ac
+# ╟─d5229b28-c257-43b4-8fe9-d071b2d986ac
 # ╠═88536ce5-1db0-43f3-893b-5d27fd18f438
 # ╠═10a5f557-6a2f-456c-9b9b-b5852a24bbe6
 # ╠═ec872df1-376b-4536-b349-1223b5fc6a30
@@ -2359,6 +2429,13 @@ version = "4.1.0+0"
 # ╠═1a17aa80-2431-4fcc-aed2-4dfacaefa724
 # ╠═da187f29-646b-4bbc-95d3-a3277e05010a
 # ╠═45fe0234-e998-4559-9c20-cb5a0d5df5dd
-# ╟─a1458d0b-dfac-4717-b33a-f72e7a90a22c
+# ╠═a1458d0b-dfac-4717-b33a-f72e7a90a22c
+# ╟─3b57df08-53ac-4b72-9c2b-7bd5549f6858
+# ╠═cc83f609-4cf8-483c-bd27-42fe370e4625
+# ╠═da6feb40-e45b-4f9e-b99f-18eb00a3a23e
+# ╠═c861390d-baad-4ede-9bef-c3bf5d5b58d8
+# ╠═93de99d1-6896-49e8-852a-74f4717ffccc
+# ╠═de5e1339-5987-43c8-a809-b7ab4cfea155
+# ╟─38d0d9ec-cc66-4222-9f29-45cb83507f8a
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
