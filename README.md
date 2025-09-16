@@ -95,3 +95,6 @@ If you want to make your app accessible to others (please remember to make sure 
 The `.devcontainer` used here has been adapted from the [Julia workshop for the UCL Festival of Digital Research & Scholarship 2024](https://github.com/UCL-ARC/julia-workshop), in turn based on the [Zero-setup R workshops with GitHub Codespaces](https://github.com/revodavid/devcontainers-rstudio) repository presented at [rstudio::conf 2022](https://rstudioconf2022.sched.com/event/11iag/zero-setup-r-workshops-with-github-codespaces).
 
 </details>
+
+## Authors
+The contents of this repository are based on material originally developed by [Valentin Churavy](https://vchuravy.dev/) (University of Augsburg/JGU Mainz) and [Mosè Giordano](https://giordano.github.io) (UCL).
