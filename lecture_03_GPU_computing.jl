@@ -47,6 +47,33 @@ using Atomix: @atomic, @atomicswap, @atomicreplace
 # ╔═╡ cbdc2dc8-8246-4377-9d12-0bf748d3a158
 using GPUArraysCore
 
+# ╔═╡ 918f7bfe-dc80-418c-9ddf-99ff8907ff61
+md"""
+## Accessing the GPU node
+
+Getting onto the remote server
+
+1. User name `juliaXX`
+2. `ssh juliaxx@licca-li-02.rz.uni-augsburg.de`
+3. Jump to `ssh licca047`
+4. `git clone https://github.com/hpsc-lab/spp2256-software-dev`
+5. `cd spp2256-software-dev`
+5. `./start_notebook.sh`
+
+
+You will see something like:
+```
+On your local machine run
+    ssh -f -N licca-li-02.rz.uni-augsburg.de -L 1729:localhost:1729
+```
+
+And later:
+```
+┌ Info:
+│ Go to http://localhost:1729/?secret=XXXXXX in your browser to start writing ~ have fun!
+```
+"""
+
 # ╔═╡ ef309337-b906-4f77-9eb7-c373238e051e
 md"""
 # Accelerated Computing
@@ -2566,6 +2593,7 @@ version = "4.1.0+0"
 # ╔═╡ Cell order:
 # ╠═f695f3c2-9215-11f0-1eb1-fde5e8318217
 # ╠═778871eb-7387-4046-afb2-eefe4bfd453f
+# ╟─918f7bfe-dc80-418c-9ddf-99ff8907ff61
 # ╟─ef309337-b906-4f77-9eb7-c373238e051e
 # ╟─c656f4aa-697f-4a07-b8a4-242218c29a9d
 # ╟─b723a980-8e5c-4e96-9a9b-88e25857b651
