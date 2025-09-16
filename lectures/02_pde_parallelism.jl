@@ -1,6 +1,9 @@
 ### A Pluto.jl notebook ###
 # v0.20.18
 
+#> [frontmatter]
+#> title = "Lecture 02"
+
 using Markdown
 using InteractiveUtils
 

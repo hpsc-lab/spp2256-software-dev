@@ -43,6 +43,9 @@ using PythonCall, RDatasets
 # ╔═╡ 03ee0f1f-ca85-4690-83c1-22dcb3519f09
 using PairPlots
 
+# ╔═╡ e036e0b1-60f5-4670-9956-15e74d010ee9
+using MPI, Serialization, StaticArrays
+
 # ╔═╡ 0e88ed74-261d-4aad-82dc-ed8076684406
 using Measurements
 
@@ -329,6 +332,22 @@ macro mpi(np, expr)
 		rm($control_io_path)
 		all(isnothing, v) ? nothing : v
 	end
+end
+
+# ╔═╡ fa98c58b-e61b-4762-a89f-58cf6b5a50d0
+@mpi np let
+	using StaticArrays
+	
+	MPI.Init()
+	comm = MPI.COMM_WORLD
+
+	x = ones(SVector{3, Float64})
+	sum = MPI.Allreduce([x], +, comm)
+
+	if MPI.Comm_rank(comm) == 0
+		@show sum
+	end
+	nothing
 end
 
 # ╔═╡ c739f61d-7104-4ae4-9934-fc98657fc2fc
@@ -644,25 +663,6 @@ md"""
 - Documentation: [https://docs.julialang.org](https://docs.julialang.org)
 - [2025 RSE Course](https://vchuravy.dev/rse-course)
 """
-
-# ╔═╡ e036e0b1-60f5-4670-9956-15e74d010ee9
-using MPI, Serialization, StaticArrays
-
-# ╔═╡ fa98c58b-e61b-4762-a89f-58cf6b5a50d0
-@mpi np let
-	using StaticArrays
-	
-	MPI.Init()
-	comm = MPI.COMM_WORLD
-
-	x = ones(SVector{3, Float64})
-	sum = MPI.Allreduce([x], +, comm)
-
-	if MPI.Comm_rank(comm) == 0
-		@show sum
-	end
-	nothing
-end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
