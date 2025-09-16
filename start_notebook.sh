@@ -23,7 +23,7 @@ if [[ "${HOSTNAME}" == "licca047" ]]; then
 fi
 
 if [[ "${HOSTNAME}" == "licca047" ]]; then
-    SERVER="licca-li-02.rz.uni-augsburg.de"
+    SERVER="${USER}@licca-li-02.rz.uni-augsburg.de"
 elif [[ "${HOSTNAME}" == *".rc.ucl.ac.uk" ]]; then
     # Fibonacci or Mandelbrot
     SERVER="${HOSTNAME}"
