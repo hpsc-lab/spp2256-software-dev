@@ -230,7 +230,7 @@ $\frac{\partial U}{\partial t} = a * (\frac{\partial^2 U}{\partial x^2} + \frac{
 
 Using a finite-difference approximation:
 
-$dU = a * dt * (\frac{U[i+1, j] - 2U[i,j] + U[i-1,j]}{dx^2} + \frac{U[i, j+1] - 2U[i,j] + U[i,j-1]}{dy^2} )$
+$dU = a * (\frac{U[i+1, j] - 2U[i,j] + U[i-1,j]}{dx^2} + \frac{U[i, j+1] - 2U[i,j] + U[i,j-1]}{dy^2} )$
 
 !!! note
 	The code below implements the harness using OffsetArrays and wrap around boundary conditions to make your life easier.
