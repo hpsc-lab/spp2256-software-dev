@@ -51,6 +51,12 @@ PlutoUI.TableOfContents(; depth=4)
 # ╔═╡ 8577787d-d72d-4d92-8c69-9e516a85b779
 ChooseDisplayMode()
 
+# ╔═╡ 30d8b257-4694-4bc3-b38c-54929c1c5c1b
+md"""
+Also available on Google Colab:
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hpsc-lab/spp2256-software-dev/blob/main/notebooks/Introduction_to_Accelerated_Computing.ipynb)
+"""
+
 # ╔═╡ d4c35d94-5a04-43a3-99b4-c8e9f05a2d5e
 md"""
 # Exercise: Introduction to accelerated computing
@@ -256,17 +262,21 @@ end
 end
 
 # ╔═╡ aa2d455e-c9fc-4a7b-b50e-77709481c2a7
-function heat_2D!(du, u, (a, dx, dy), t)
+function heat_2D!(du, u, (a, dx, dy, xs, ys), t)
 	N, M = size(u)
     N = N - 2
     M = M - 2
 	
 	# update boundary condition (wrap around)
-    u[0, :]   .= u[N, :]
-    u[N+1, :] .= u[1, :]
-    u[:, 0]   .= u[:, N]
-    u[:, N+1] .= u[:, 0]
+    u[1, :]   .= u[N+1, :]
+    u[N+2, :] .= u[2, :]
+    u[:, 1]   .= u[:, N+1]
+    u[:, N+2] .= u[:, 1]
 	
+    # OffsetArray and CUDA don't compose neatly :/
+    u = OffsetArray(u, xs, ys)
+    du = OffsetArray(u, xs, ys)
+
 	kernel = heat_2D_kernel!(get_backend(du))
 	kernel(du, u, a, dx, dy; ndrange=(N,M))
 
@@ -291,20 +301,21 @@ begin
 	xs = 0:(N+1)
 	ys = 0:(N+1)
 
-	u₀ = OffsetArray(
-		KernelAbstractions.zeros(
+	u₀ = KernelAbstractions.zeros(
 			backend, Float32, N+2, N+2)
-		, xs, ys)
-	parent(u₀)[16:32, 16:32] .= 5
+	u₀[16:32, 16:32] .= 5
 
 	nothing
 end
 
 # ╔═╡ cdf61aff-ec98-4174-9d48-c287977742cb
-prob = ODEProblem(heat_2D!, u₀, (0.0, t_final), (a, dx, dy));
+prob = ODEProblem(heat_2D!, u₀, (0.0, t_final), (a, dx, dy, xs, ys));
 
 # ╔═╡ 8e963ae6-06fd-47fc-a1de-e884468de234
-sol = solve(prob, Tsit5(), saveat=0.2);
+begin
+	CUDA.allowscalar(false)
+	sol = solve(prob, Tsit5(), saveat=0.2);
+end
 
 # ╔═╡ 78f7884c-3523-4d96-9dfc-fbe9de36a86b
 let
@@ -2816,6 +2827,7 @@ version = "4.1.0+0"
 # ╟─75b9bee9-7d03-4c90-b828-43e9e946517b
 # ╟─3e5c3c97-4401-41d4-a701-d9b24f9acdc6
 # ╟─8577787d-d72d-4d92-8c69-9e516a85b779
+# ╟─30d8b257-4694-4bc3-b38c-54929c1c5c1b
 # ╟─d4c35d94-5a04-43a3-99b4-c8e9f05a2d5e
 # ╠═51588c4c-2b03-4ff2-b64e-7fd2e3bef81c
 # ╠═91f3684d-ed56-4ee2-b914-79ab4b6ed87a

@@ -32,7 +32,7 @@ md"""
 # ╔═╡ d74c49ed-eaf2-4c2e-a1f9-0139d349eccf
 md"""
 Also available on Google Colab:
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/vchuravy/rse-course/blob/main/src/mod3_parallelism/Introduction_to_KernelAbstractions.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hpsc-lab/spp2256-software-dev/blob/main/notebooks/Introduction_to_KernelAbstractions.ipynb)
 """
 
 # ╔═╡ 3acfbfad-1233-4e08-a7d4-66508dad8c0d
