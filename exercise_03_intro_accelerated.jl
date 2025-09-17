@@ -42,6 +42,9 @@ begin
 	using CairoMakie
 end
 
+# ╔═╡ 1b9844e2-2e2b-47c2-8a5e-3ff3dbfacc16
+using OrdinaryDiffEqTsit5
+
 # ╔═╡ 3e5c3c97-4401-41d4-a701-d9b24f9acdc6
 PlutoUI.TableOfContents(; depth=4)
 
@@ -214,7 +217,7 @@ begin
 end
 
 # ╔═╡ 0ad45abb-0d9f-4e8d-b097-b0b42ba024f7
-dt = dx^2 * dy^2 / (2.0 * a * (dx^2 + dy^2)) # Largest stable time step
+t_final = 3.0
 
 # ╔═╡ 83042a1e-f964-483d-b316-a486cfabd7e0
 N = 64
@@ -234,28 +237,32 @@ $dU = a * dt * (\frac{U[i+1, j] - 2U[i,j] + U[i-1,j]}{dx^2} + \frac{U[i, j+1] - 
 """
 
 # ╔═╡ 9eb166fa-360e-4a5d-a2ac-9113c2f264b3
-@kernel function diffuse(dU, @Const(U), a, dt, dx, dy)
+@kernel function heat_2D_kernel!(du, @Const(u), a, dx, dy)
 	# implement me
 end
 
 # ╔═╡ aa2d455e-c9fc-4a7b-b50e-77709481c2a7
-function diffuse!(U, a, dt, dx, dy)
-    dU = zero(U)
-	diffuse(get_backend(U))(dU, U, a, dt, dx, dy; ndrange=(N,N))
-	U .+= dU
+function heat_2D!(du, u, (a, dx, dy), t)
+	N, M = size(u)
+    N = N - 2
+    M = M - 2
 	
-    # update boundary condition (wrap around)
-    U[0, :]   .= U[N, :]
-    U[N+1, :] .= U[1, :]
-    U[:, 0]   .= U[:, N]
-    U[:, N+1] .= U[:, 0]
-    U
+	# update boundary condition (wrap around)
+    u[0, :]   .= u[N, :]
+    u[N+1, :] .= u[1, :]
+    u[:, 0]   .= u[:, N]
+    u[:, N+1] .= u[:, 0]
+	
+	kernel = heat_2D_kernel!(get_backend(du))
+	kernel(du, u, a, dx, dy; ndrange=(N,M))
+
+	return nothing
 end
 
 # ╔═╡ f912ee44-15ed-469f-b417-cf7d8d87146e
 answer_box(hint(md"""
 ```julia
-@kernel function diffuse(dU, @Const(U), a, dt, dx, dy)
+@kernel function heat_2D_kernel(du, @Const(u), a, dx, dy)
 	i, j = @index(Global, NTuple)
 	out[i, j] = a * dt * (
 		(U[i + 1, j] - 2 * U[i, j] + U[i - 1, j]) / dx^2 +
@@ -265,23 +272,54 @@ end
 ```
 """))
 
-# ╔═╡ 2a986721-f513-488d-970e-4797f0de135f
-let
+# ╔═╡ 7147bba2-78ae-49fa-ae35-2c815ee188ae
+begin
 	xs = 0:(N+1)
 	ys = 0:(N+1)
-	domain = OffsetArray(
-		KernelAbstractions.zeros(backend, Float32, N+2, N+2),
-		xs, ys)
-	# TODO: Split out into initalize function
-	parent(domain)[16:32, 16:32] .= 5
+
+	u₀ = OffsetArray(
+		KernelAbstractions.zeros(
+			backend, Float32, N+2, N+2)
+		, xs, ys)
+	parent(u₀)[16:32, 16:32] .= 5
+
+	heatmap(xs, ys, parent(u₀))
+end
+
+# ╔═╡ cdf61aff-ec98-4174-9d48-c287977742cb
+prob = ODEProblem(heat_2D!, u₀, (0.0, t_final), (a, dx, dy))
+
+# ╔═╡ 8e963ae6-06fd-47fc-a1de-e884468de234
+sol = solve(prob, Tsit5(), saveat=0.2);
+
+# ╔═╡ 78f7884c-3523-4d96-9dfc-fbe9de36a86b
+let
+	idx = Observable(1)
+	data = @lift Array(parent(sol.u[$idx]))
+	fig, ax, hm = heatmap(xs, ys, data)
 	
-	fig, ax, hm = heatmap(xs, ys, Array(parent(domain)))
-	
-	Makie.Record(fig, 1:250) do i
-	    diffuse!(domain, a, dt, dx, dy)  # update data
-	    autolimits!(ax) # update limits
+	Makie.Record(fig, 1:length(sol.u), framerate=5) do i
+	    idx[] = i
 	end
 end
+
+# ╔═╡ 2a986721-f513-488d-970e-4797f0de135f
+# let
+# 	xs = 0:(N+1)
+# 	ys = 0:(N+1)
+# 	domain = OffsetArray(
+# 		KernelAbstractions.zeros(backend, Float32, N+2, N+2),
+# 		xs, ys)
+# 	# TODO: Split out into initalize function
+# 	parent(domain)[16:32, 16:32] .= 5
+	
+# 	fig, ax, hm = heatmap(xs, ys, Array(parent(domain)))
+	
+# 	Makie.Record(fig, 1:250) do i
+# 	    diffuse!(domain, a, dt, dx, dy)  # update data
+# 	    autolimits!(ax) # update limits
+# 	end
+# end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -314,7 +352,7 @@ oneAPI = "~2.0.3"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.5"
+julia_version = "1.11.6"
 manifest_format = "2.0"
 project_hash = "81e4ea397ec4528af2733db8b8dce3926ca44ef1"
 
@@ -2314,6 +2352,7 @@ version = "3.6.0+0"
 # ╠═fc859cea-a41a-4d96-bf86-5a23bca19589
 # ╟─1c76d376-ef91-4410-a981-d8a6dea3033f
 # ╠═f7829706-3981-45b5-bdc3-d8b21155229a
+# ╠═1b9844e2-2e2b-47c2-8a5e-3ff3dbfacc16
 # ╠═0b20861c-995c-4890-81b9-98b8aca5095a
 # ╠═0ad45abb-0d9f-4e8d-b097-b0b42ba024f7
 # ╠═83042a1e-f964-483d-b316-a486cfabd7e0
@@ -2321,6 +2360,10 @@ version = "3.6.0+0"
 # ╠═9eb166fa-360e-4a5d-a2ac-9113c2f264b3
 # ╠═aa2d455e-c9fc-4a7b-b50e-77709481c2a7
 # ╟─f912ee44-15ed-469f-b417-cf7d8d87146e
+# ╠═7147bba2-78ae-49fa-ae35-2c815ee188ae
+# ╠═cdf61aff-ec98-4174-9d48-c287977742cb
+# ╠═8e963ae6-06fd-47fc-a1de-e884468de234
+# ╠═78f7884c-3523-4d96-9dfc-fbe9de36a86b
 # ╠═2a986721-f513-488d-970e-4797f0de135f
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
