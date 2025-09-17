@@ -1,6 +1,9 @@
 ### A Pluto.jl notebook ###
 # v0.20.18
 
+#> [frontmatter]
+#> title = "Aside: Performance Engineering with GPUs"
+
 using Markdown
 using InteractiveUtils
 
@@ -21,6 +24,17 @@ using CUDA: i32
 # ╔═╡ 0c2e2176-2d7f-4e2c-9405-462f20c2ca7f
 using Random
 
+# ╔═╡ feb0d22f-6d2c-48a7-abae-80de5f611662
+md"""
+# Performance Engineering with GPUs
+"""
+
+# ╔═╡ d74c49ed-eaf2-4c2e-a1f9-0139d349eccf
+md"""
+Also available on Google Colab:
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/vchuravy/rse-course/blob/main/src/mod3_parallelism/Introduction_to_KernelAbstractions.ipynb)
+"""
+
 # ╔═╡ 3acfbfad-1233-4e08-a7d4-66508dad8c0d
 versioninfo()
 
@@ -29,6 +43,17 @@ md"""
 
 ## A first GPU kernel
 """
+
+# ╔═╡ 51eb19f3-0de8-4694-b5aa-7931f95a4526
+functional = CUDA.functional()
+
+# ╔═╡ 0e6451eb-bc37-4e05-8000-e4828643978e
+if !functional
+	md"""
+	!!! warn 
+	    This machine has no CUDA support. I recommend using [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/vchuravy/rse-course/blob/main/src/mod3_parallelism/Introduction_to_KernelAbstractions.ipynb)
+	"""
+end
 
 # ╔═╡ 962a10e7-0a06-43dd-af30-fdc891e1287b
 function copy_cpu!(A, B)
@@ -190,12 +215,14 @@ md"""
 """
 
 # ╔═╡ 2b8dafa0-9558-4912-a900-fb2cead352bd
-const nreps = 3
-const N = 2048
-const T = Float32
-
-const TILE_DIM = 32
-const BLOCK_ROWS = 8
+begin
+	const nreps = 3
+	const N = 2048
+	const T = Float32
+	
+	const TILE_DIM = 32
+	const BLOCK_ROWS = 8
+end
 
 # ╔═╡ a1bfe2e2-e921-4ba3-9563-0dd0b7bbd26f
 md"""
@@ -271,7 +298,9 @@ end
 end
 
 # ╔═╡ 3bdc33cd-8b8a-4b91-a11b-13a23981f7cf
+md"""
 ### Local Memory + process multiple elements per lane
+"""
 
 # ╔═╡ d1a3bf73-99c0-4d05-a6c0-980d1dec75ae
 import KernelAbstractions.Extras: @unroll
@@ -339,7 +368,9 @@ end
 end
 
 # ╔═╡ 58d5e165-4aa2-46b6-803d-91125985eb76
+md"""
 ### Benchmark harness
+"""
 
 # ╔═╡ ffb87594-d922-49cb-892e-d425c860daef
 backend = CUDABackend()
@@ -1194,9 +1225,13 @@ version = "17.4.0+2"
 """
 
 # ╔═╡ Cell order:
+# ╟─feb0d22f-6d2c-48a7-abae-80de5f611662
 # ╠═30fef252-8f23-11f0-055e-b1fb9ce7d6fb
+# ╟─d74c49ed-eaf2-4c2e-a1f9-0139d349eccf
 # ╠═3acfbfad-1233-4e08-a7d4-66508dad8c0d
-# ╠═be442c44-9544-4439-a778-d6ea6d60dd3e
+# ╟─be442c44-9544-4439-a778-d6ea6d60dd3e
+# ╠═51eb19f3-0de8-4694-b5aa-7931f95a4526
+# ╟─0e6451eb-bc37-4e05-8000-e4828643978e
 # ╠═962a10e7-0a06-43dd-af30-fdc891e1287b
 # ╠═9668c885-143a-41dc-afd5-3ed802edf245
 # ╠═548a2642-cbe9-41e5-aa2e-749290fb0026
@@ -1205,33 +1240,33 @@ version = "17.4.0+2"
 # ╠═ff1f0e27-9f09-4560-a29b-dccb76770f43
 # ╠═d2a95316-a182-415a-8b41-15bbe2c07664
 # ╠═c5943384-1ed8-4ff9-848c-1c6da05cb4e3
-# ╠═7f1734de-fef1-47f9-ac91-18867f0b5073
+# ╟─7f1734de-fef1-47f9-ac91-18867f0b5073
 # ╠═baaa778f-0896-4392-81d5-f3b3203958be
 # ╠═9a7d6edb-96e2-44be-a196-e340330ba0b3
 # ╠═8926d1a4-ca39-4276-938d-37af3e67e3e4
-# ╠═8fc9ee68-ebbf-4585-a1e8-1a05d436ac93
+# ╟─8fc9ee68-ebbf-4585-a1e8-1a05d436ac93
 # ╠═edf1bd01-2f7f-467e-ac7c-0c86161a5330
 # ╠═62eb782a-d900-416d-8791-cb664c14502b
-# ╠═8be22bb2-5a71-436c-a641-2c01e9435207
+# ╟─8be22bb2-5a71-436c-a641-2c01e9435207
 # ╠═956e72d5-2b0e-4d57-8ca1-74a8cc5e87a8
-# ╠═862df26a-05e0-4d01-8cbb-6441b3bbb1e6
+# ╟─862df26a-05e0-4d01-8cbb-6441b3bbb1e6
 # ╠═87c50921-e91e-40fe-aa9c-cb810732bc74
 # ╠═7973ca15-2339-4917-8c03-3716c09e9d25
 # ╠═ed289720-b625-454f-b5be-c1d37c51b68a
 # ╠═c1a3907e-5f71-4cd1-ab2e-1ecc44ef8e92
 # ╠═d83203f5-3284-4acb-8d90-216aa43e0339
-# ╠═19f60fb3-934a-4414-b037-2cccfe663f47
+# ╟─19f60fb3-934a-4414-b037-2cccfe663f47
 # ╠═e41b7693-d1a9-4807-a6a6-641b3a58c787
 # ╠═5a48d053-64e5-410f-9146-0aaeef9df514
-# ╠═13c91be9-cb41-4c13-928c-6844064285e5
+# ╟─13c91be9-cb41-4c13-928c-6844064285e5
 # ╠═2b8dafa0-9558-4912-a900-fb2cead352bd
-# ╠═a1bfe2e2-e921-4ba3-9563-0dd0b7bbd26f
+# ╟─a1bfe2e2-e921-4ba3-9563-0dd0b7bbd26f
 # ╠═c8ce4e2e-670e-4ba3-8576-0b5be256b795
 # ╠═d409ebc8-8864-442b-a91b-e651bf7957bf
-# ╠═e8a1c8b7-c425-42c6-8ce4-772564118561
+# ╟─e8a1c8b7-c425-42c6-8ce4-772564118561
 # ╠═1e94f48a-8e1e-49bb-b936-21795ca195c4
 # ╠═f5c41ddc-b6b4-4dd9-b7e0-29b395859003
-# ╠═3bdc33cd-8b8a-4b91-a11b-13a23981f7cf
+# ╟─3bdc33cd-8b8a-4b91-a11b-13a23981f7cf
 # ╠═d1a3bf73-99c0-4d05-a6c0-980d1dec75ae
 # ╠═0bdcd901-ce4f-4fd7-96fb-e60a988cdab2
 # ╠═c2468ec4-f7cd-4e14-a7ad-10f4855e81ba

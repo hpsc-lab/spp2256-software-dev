@@ -61,6 +61,9 @@ end
 # ╔═╡ 4ee34581-d428-4234-a44d-d63147b4aaf0
 fib(12)
 
+# ╔═╡ aa907d45-f9a0-40ad-9a24-3176c5c9b68b
+import Base.Threads: @spawn
+
 # ╔═╡ 1723e574-7a16-4e7c-95eb-138d0988b09f
 # TODO: Implement pfib
 
@@ -2402,6 +2405,7 @@ version = "4.1.0+0"
 # ╟─0ee1d3bf-9edf-4ee2-af83-0f61e179edad
 # ╠═dd0097a9-207c-4348-a159-ac2d31fe66b4
 # ╠═4ee34581-d428-4234-a44d-d63147b4aaf0
+# ╠═aa907d45-f9a0-40ad-9a24-3176c5c9b68b
 # ╠═1723e574-7a16-4e7c-95eb-138d0988b09f
 # ╟─51f6ff5e-af76-4f54-af8d-a2ff527126a2
 # ╟─98d613b1-44ed-49fc-90a0-a74149dba8e5

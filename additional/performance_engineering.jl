@@ -2,17 +2,8 @@
 # v0.20.18
 
 #> [frontmatter]
-#> chapter = "1"
-#> section = "3"
-#> order = "3"
 #> title = "Aside: Performance Engineering"
-#> date = "2025-04-30"
 #> tags = ["module1", "track_performance"]
-#> layout = "layout.jlhtml"
-#> 
-#>     [[frontmatter.author]]
-#>     name = "Valentin Churavy"
-#>     url = "https://vchuravy.dev"
 
 using Markdown
 using InteractiveUtils
@@ -771,7 +762,7 @@ TimerOutputs = "~0.5.29"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.5"
+julia_version = "1.11.6"
 manifest_format = "2.0"
 project_hash = "0082904d92f716a4ae039cb0e659e369d5ed6fdb"
 

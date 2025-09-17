@@ -79,12 +79,14 @@ end
 begin
 	function dirchlet_bc!(u)
 	    u[1] = 0
-	    return u[end] = 0
+	    u[end] = 0
+		return
 	end
 	
 	function periodic_bc!(u)
 	    u[1] = u[end - 1]
-	    return u[end] = u[2]
+	    u[end] = u[2]
+		return
 	end
 end
 

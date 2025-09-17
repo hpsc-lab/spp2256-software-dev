@@ -514,9 +514,6 @@ md"""
 - [2025 RSE Course](https://vchuravy.dev/rse-course)
 """
 
-# ╔═╡ e036e0b1-60f5-4670-9956-15e74d010ee9
-using MPI, Serialization, StaticArrays
-
 # ╔═╡ fa98c58b-e61b-4762-a89f-58cf6b5a50d0
 @mpi np let
 	using StaticArrays
@@ -532,6 +529,9 @@ using MPI, Serialization, StaticArrays
 	end
 	nothing
 end
+
+# ╔═╡ e036e0b1-60f5-4670-9956-15e74d010ee9
+using MPI, Serialization, StaticArrays
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
